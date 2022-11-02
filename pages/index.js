@@ -12,7 +12,7 @@ export default function Home({ isDragging, text }) {
   // Puzzle size input state
   const [puzzleSizeInput, setPuzzleSizeInput] = useState("")
 
-  // Puzzle size
+  // Puzzle
   const [puzzleSize, setPuzzleSize] = useState("")
 
   // Create puzzle
@@ -95,13 +95,13 @@ export default function Home({ isDragging, text }) {
               {
                 puzzleSize
                   ?
-                  <div className={`w-[${puzzleSize.length}px] h-[${puzzleSize.length}px] bg-slate-100 border border-zinc-300 grid grid-row-[${puzzleSize.length / 2}] gap-2 mt-3 px-1 py-1`}>
+                  <div className={`w-[${puzzleSize.length}px] h-[${puzzleSize.length}px] bg-slate-100 border border-zinc-300 grid grid-cols-2 gap-2 mt-3 px-1 py-1`}>
                     {
                       puzzleSize.map((_number, idx) => {
                         return (
                           // <div ref={dragRef} style={{ opacity }} key={idx * 1000 * Math.random()}>
                           <div key={idx * 1000 * Math.random()}>
-                            <div className="px-1 py-1 bg-green-600">
+                            <div className="px-2 py-1 bg-green-600 text-center">
                               <p>{_number}</p>
                             </div>
                           </div>
