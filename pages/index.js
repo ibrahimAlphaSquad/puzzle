@@ -121,7 +121,7 @@ export default function Home() {
                   onClick={() => { setPuzzleSize("") }}
                   type="button"
                   disabled={puzzleSize.length !== 0 ? false : true}
-                  className={`${puzzleSize.length !== 0 ? "bg-zinc-800" : "bg-zinc-500"} flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium`}>
+                  className={`${puzzleSize.length !== 0 ? "bg-zinc-800 cursor-pointer" : "bg-zinc-500 cursor-not-allowed"} flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium`}>
                   Clear Grid
                 </button>
               </div>
@@ -137,7 +137,7 @@ export default function Home() {
                     puzzleSize.map((_number, idx) => {
                       return (
                         <div
-                          className="px-2 py-1 bg-zinc-900 text-white text-center"
+                          className="px-2 py-1 bg-zinc-900 text-white text-center cursor-move"
                           key={idx * 1000 * Math.random()}
                           onDragStart={(e) => dragStart(e, idx)}
                           onDragEnter={(e) => dragEnter(e, idx)}
