@@ -53,8 +53,10 @@ export default function Home() {
   // Create puzzle
   const createPuzzleHandler = (e) => {
     e.preventDefault();
+    const input = e.target.puzzleLength.value;
+    setPuzzleGridSize(input)
     let dup = [];
-    for (let index = 0; index < puzzleSizeInput * puzzleSizeInput; index++) {
+    for (let index = 0; index < input * input; index++) {
       dup.push(index + 1)
     }
 
@@ -64,20 +66,8 @@ export default function Home() {
 
     setPuzzleSizeInput("")
     setPuzzleSize(shuffledDup)
+    document.getElementsByName("puzzleLength").value = ""
   }
-
-  // Checking data 
-  const validate = () => {
-    if (puzzleSizeInput !== "") {
-      return false
-    } else {
-      return true
-    }
-  }
-
-  useEffect(() => {
-    validate()
-  }, [puzzleSizeInput])
 
   return (
     <>
@@ -112,15 +102,7 @@ export default function Home() {
                   Puzzle Size
                 </label>
                 <input
-                  value={puzzleSizeInput}
-                  onChange={(e) => {
-                    setPuzzleSizeInput(
-                      e.target.value
-                    )
-                    setPuzzleGridSize(
-                      e.target.value
-                    )
-                  }}
+                  name="puzzleLength"
                   className="mt-2 outline-none border border-zinc-200 rounded-md placeholder-zinc-400 text-zinc-700 w-full text-xs leading-[150%] font-normal py-[14px] px-[14px] h-[42px]"
                   type="number"
                   placeholder="Enter Puzzle Size"
@@ -131,15 +113,14 @@ export default function Home() {
               <div className="flex justify-between items-center ">
                 <button
                   type="submit"
-                  isabled={validate()}
-                  className={`${validate() ? "bg-zinc-500" : "bg-zinc-800"} flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium`}>
+                  className="bg-zinc-800 flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium">
                   Create Puzzle
                 </button>
                 <button
                   onClick={() => { setPuzzleSize("") }}
                   type="button"
-                  disabled={validate() && puzzleSize.length !== 0 ? false : true}
-                  className={`${validate() && puzzleSize.length !== 0 ? "bg-zinc-800" : "bg-zinc-500"} flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium`}>
+                  disabled={puzzleSize.length !== 0 ? false : true}
+                  className={`${puzzleSize.length !== 0 ? "bg-zinc-800" : "bg-zinc-500"} flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium`}>
                   Clear Grid
                 </button>
               </div>
@@ -150,7 +131,7 @@ export default function Home() {
             {
               puzzleSize.length
                 ?
-                <div style={{ gridTemplateColumns: `repeat(${puzzleGridSize}, 1fr)` }} className={`w-[${puzzleSize.length * 2}px] h-[${puzzleSize.length * 2}px] bg-slate-100 border border-zinc-300 grid grid-rows-${puzzleGridSize} grid-cols-${puzzleSizeInput} gap-2 mt-3 px-1 py-1`}>
+                <div style={{ gridTemplateColumns: `repeat(${puzzleGridSize}, 1fr)` }} className={`w-[${puzzleSize.length * 2}px] h-[${puzzleSize.length * 2}px] bg-slate-100 border border-zinc-300 grid gap-2 mt-3 px-1 py-1`}>
                   {
                     puzzleSize.map((_number, idx) => {
                       return (
