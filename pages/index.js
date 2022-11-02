@@ -66,7 +66,7 @@ export default function Home() {
 
     setPuzzleSizeInput("")
     setPuzzleSize(shuffledDup)
-    document.getElementsByName("puzzleLength").value = ""
+    document.getElementById("puzzleLength").value = ""
   }
 
   return (
@@ -103,6 +103,7 @@ export default function Home() {
                 </label>
                 <input
                   name="puzzleLength"
+                  id="puzzleLength"
                   className="mt-2 outline-none border border-zinc-200 rounded-md placeholder-zinc-400 text-zinc-700 w-full text-xs leading-[150%] font-normal py-[14px] px-[14px] h-[42px]"
                   type="number"
                   placeholder="Enter Puzzle Size"
