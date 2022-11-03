@@ -1,127 +1,127 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect } from 'react'
 
 function ImagePuzzle() {
-  const canvasRef = useRef(null);
-  const inputRef = useRef(null);
-  const [url, setUrl] = useState(
-    "https://cdn.pixabay.com/photo/2022/10/09/02/16/haunted-house-7508035_960_720.jpg"
-  );
-  const [redraw, setRedraw] = useState(false);
+  useEffect(() => {
+    var c = document.getElementById("canvas"),
+      w = innerWidth,
+      h = innerHeight;
+    c.width = w;
+    c.height = h;
+    console.log(c.width)
+    var ctx = c.getContext("2d"),
+      input = document.getElementById("input"),
+      reader = new FileReader(),
+      img = new Image(),
+      imgW, //px
+      imgH, //px
+      imgData,
+      tileDim = 400, //tile dimensions px
+      tileCountX, //how many tiles we can fit
+      tileCountY;
 
-  const draw = (canvas, url) => {
-    console.log("asdasdasd");
-
-    var ctx = canvas.getContext("2d");
-    // var cw = canvas.width;
-    //var ch = canvas.height;
-
-    var rows = 3;
-    var cols = 3;
-
-    var img = new Image();
-    // img.onload=start;
-    img.src = url;
-
-    var iw = (canvas.width = img.width);
-    var ih = (canvas.height = img.height);
-    var pieceWidth = iw / cols;
-    var pieceHeight = ih / rows;
-
-    var pieces = [
-      { col: 0, row: 0, index: 0 },
-      { col: 1, row: 0, index: 1 },
-      { col: 2, row: 0, index: 2 },
-      { col: 0, row: 1, index: 3 },
-      { col: 1, row: 1, index: 4 },
-      { col: 2, row: 1, index: 5 },
-      { col: 0, row: 2, index: 6 },
-      { col: 1, row: 2, index: 7 },
-      { col: 2, row: 2, index: 8 }
-    ];
-    shuffle(pieces);
-
-    var i = 0;
-    for (var y = 0; y < rows; y++) {
-      for (var x = 0; x < cols; x++) {
-        var p = pieces[i++];
-        console.log("p", p)
-        console.log("img", img)
-        console.log("pieceWidth", pieceWidth)
-        console.log(img,
-          // take the next x,y piece
-          x * pieceWidth,
-          y * pieceHeight,
-          pieceWidth,
-          pieceHeight,
-          // draw it on canvas based on the shuffled pieces[] array
-          p.col * pieceWidth,
-          p.row * pieceHeight,
-          pieceWidth,
-          pieceHeight)
-        ctx.drawImage(
-          // from the original image
-          img,
-          // take the next x,y piece
-          x * pieceWidth,
-          y * pieceHeight,
-          pieceWidth,
-          pieceHeight,
-          // draw it on canvas based on the shuffled pieces[] array
-          p.col * pieceWidth,
-          p.row * pieceHeight,
-          pieceWidth,
-          pieceHeight
-        );
+    //read file input
+    input.onchange = function () {
+      reader.readAsDataURL(input.files[0]);
+      reader.onload = function () {
+        img.src = reader.result;
+        img.onload = function () {
+          //start
+          init();
+          var tiles = getTiles();
+          drawTiles(tiles);
+        }
       }
     }
 
-    // canvas.addEventListener("mousedown", doMouseDown, false);
-    console.log("canvas.onMouseDown", canvas.onMouseDown)
-  };
+    function init() {
+      imgW = img.width;
+      imgH = img.height;
+      //check how many full tiles we can fit
+      //right and bottom sides of the image will get cropped
+      console.log("tileDim", tileDim)
+      tileCountX = ~~(imgW / tileDim);
+      tileCountY = ~~(imgH / tileDim);
+      console.log("tileCountX", tileCountX)
+      console.log("tileCountY", tileCountY)
 
-  function shuffle(a) {
-    for (
-      var j, x, i = a.length;
-      i;
-      j = Math.floor(Math.random() * i), x = a[--i], a[i] = a[j], a[j] = x
-    );
-    return a;
-  }
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    console.log(url);
-    if (url !== "") {
-      draw(canvas, url);
+      ctx.drawImage(img, 0, 0);
+      imgData = ctx.getImageData(0, 0, imgW, imgH).data;
+      ctx.clearRect(0, 0, w, h);
     }
-  }, [url, redraw, draw]);
 
-  function clickOnElem(elem, offsetX, offsetY) {
-    var rect = elem.getBoundingClientRect(),
-      posX = rect.left, posY = rect.top; // get elems coordinates
-    // calculate position of click
-    if (typeof offsetX == 'number') posX += offsetX;
-    else if (offsetX == 'center') {
-      posX += rect.width / 2;
-      if (offsetY == null) posY += rect.height / 2;
+    //get imgdata index from img px positions
+    function indexX(x) {
+      var i = x * 4;
+      if (i > imgData.length) console.warn("X out of bounds");
+      return i;
     }
-    if (typeof offsetY == 'number') posY += offsetY;
-    // create event-object with calculated position
-    var evt = new MouseEvent('click', { bubbles: true, clientX: posX, clientY: posY });
-    elem.dispatchEvent(evt); // trigger the event on elem
-  }
+    function indexY(y) {
+      var i = imgW * 4 * y;
+      if (i > imgData.length) console.warn("Y out of bounds");
+      return i;
+    }
+    function getIndex(x, y) {
+      var i = indexX(x) + indexY(y);
+      if (i > imgData.length) console.warn("XY out of bounds");
+      return i;
+    }
 
+    //get a tile of size tileDim*tileDim from position xy
+    function getTile(x, y) {
+      var tile = [];
+      //loop over rows
+      for (var i = 0; i < tileDim; i++) {
+        //slice original image from x to x + tileDim, concat
+        console.log("getIndex(x, y + i)", getIndex(x, y + i))
+        console.log("getIndex(x + tileDim, y + i)",getIndex(x + tileDim, y + i))
+        tile.push(...imgData.slice(getIndex(x, y + i), getIndex(x + tileDim, y + i)));
+      }
+      //convert back to typed array and to imgdata object
+      tile = new ImageData(new Uint8ClampedArray(tile), tileDim, tileDim);
+      console.log("tile", tile)
+      //save original position
+      tile.x = x;
+      tile.y = y;
+      return tile;
+    }
+
+    //generate all tiles
+    function getTiles() {
+      var tiles = [];
+      for (var yi = 0; yi < tileCountY; yi++) {
+        for (var xi = 0; xi < tileCountX; xi++) {
+          tiles.push(getTile(xi * 20, yi * 20));
+          // console.log("getTile(xi * tileDim, yi * tileDim)", getTile(xi * tileDim, yi * tileDim))
+        }
+      }
+      return tiles;
+    }
+
+    //and draw with offset
+    var offset = 1.1;
+    function drawTiles(tiles) {
+      tiles.forEach((d, i) => ctx.putImageData(d, d.x * offset, d.y * offset));
+
+      //more interesting effects are easy to do:
+      // tiles.forEach((d,i) => ctx.putImageData(d, d.x * i * 0.01, d.y * i * 0.01));
+
+      //for efficiency in animation etc tiles should be converted to image object
+    }
+  }, [])
 
   return (
     <>
       <input
-        type="text"
-        value={url}
-        ref={inputRef}
-        onChange={(e) => setUrl(e.target.value)}
+        type="file"
+        id="input"
       />
-      <input type="button" value="Load" onClick={(e) => setRedraw(!redraw)} />
-      <canvas id="canvas" ref={canvasRef}></canvas>
+      <canvas
+        id="canvas"
+      // className={"xl:w-[300px] xl:h-[300px] lg:w-[250px] lg:h-[250px] w-[300px] h-[300px]"}
+      // width="600"
+      // height="600"
+      >
+      </canvas>
     </>
   )
 }
