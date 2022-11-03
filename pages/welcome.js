@@ -19,7 +19,7 @@ function Welcome({ setWelcomeModal, setPuzzleSize }) {
                                 </h1>
                             </div>
                             <div
-                                onClick={() => { setWelcomeModal(false), setPuzzleSize("") }}
+                                onClick={() => { setWelcomeModal(false), setPuzzleSize && setPuzzleSize("")  }}
                                 className="absolute top-[16px] cursor-pointer right-[16px]"
                             >
                                 <svg

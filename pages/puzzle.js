@@ -72,7 +72,7 @@ export default function Puzzle() {
   return (
     <>
       <Head>
-        <title>Puzzle App</title>
+        <title>Grid Puzzle</title>
         <meta
           name="viewport"
           content="initial-scale=1.0, width=device-width "
@@ -83,9 +83,6 @@ export default function Puzzle() {
         />
       </Head>
       <div className="bg-zinc-100 w-screen h-screen">
-        <h1 className="text-3xl font-bold text-center text-zinc-900">
-          Puzzle App
-        </h1>
         {
           welcomeModal
             ?
