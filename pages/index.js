@@ -93,9 +93,9 @@ export default function Home() {
             :
             null
         }
-        <div className="container mx-auto flex flex-col justify-center items-center max-w-[900px] w-full">
+        <div className="container mx-auto flex flex-col justify-center items-center max-w-[1024px] w-full">
           {/* Get Puzzle Size */}
-          <div className="flex justify-center flex-col mt-3 max-w-[900px] w-full">
+          <div className="flex justify-center flex-col mt-3 max-w-[1024px] w-full">
             <form onSubmit={(e) => { createPuzzleHandler(e) }} className="border border-zinc-200 px-5 py-5 rounded-lg w-full mt-3">
               <div className="w-full">
                 <label className=" text-zinc-800 text-sm font-medium pb-3">
@@ -107,6 +107,7 @@ export default function Home() {
                   className="mt-2 outline-none border border-zinc-200 rounded-md placeholder-zinc-400 text-zinc-700 w-full text-xs leading-[150%] font-normal py-[14px] px-[14px] h-[42px]"
                   type="number"
                   placeholder="Enter Puzzle Size"
+                  max={20}
                   min={2}
                   required
                 />
@@ -152,7 +153,7 @@ export default function Home() {
                 </div>
                 :
                 <div>
-                  <p className="text-xs font-normal text-zinc-800 mt-5">To Participate Please Enter Puzzle Size Above</p>
+                  <p className="text-xs font-normal text-zinc-800 mt-5">To Participate Please Enter Puzzle Size Above. Max size for the puzzle is 20</p>
                 </div>
             }
           </div>
