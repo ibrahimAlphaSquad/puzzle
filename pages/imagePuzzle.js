@@ -6,13 +6,17 @@ function ImagePuzzle() {
   // Modal
   const [welcomeModal, setWelcomeModal] = useState(false)
 
+  // set
+  const [puzzleDifficulty, setPuzzleDifficulty] = useState(null)
+
   //Image Grid
   useEffect(() => {
     const PUZZLE_HOVER_TINT = "#009900";
     const img = new Image();
     const canvas = document.querySelector("#canvas");
     const stage = canvas.getContext("2d");
-    let difficulty = 2;
+    let difficulty = puzzleDifficulty;
+    // let difficulty = 2;
     let pieces;
     let puzzleWidth;
     let puzzleHeight;
@@ -32,6 +36,26 @@ function ImagePuzzle() {
       };
       currentPiece = null;
       currentDropPiece = null;
+      // stage.drawImage(
+      //   img,
+      //   0,
+      //   0,
+      //   puzzleWidth,
+      //   puzzleHeight,
+      //   0,
+      //   0,
+      //   puzzleWidth,
+      //   puzzleHeight
+      // );
+      // createTitle("Click to Start Puzzle");
+      buildPieces();
+
+    }
+
+    function setCanvas() {
+      canvas.width = puzzleWidth;
+      canvas.height = puzzleHeight;
+      canvas.style.border = "1px solid black";
       stage.drawImage(
         img,
         0,
@@ -43,14 +67,7 @@ function ImagePuzzle() {
         puzzleWidth,
         puzzleHeight
       );
-      createTitle("Click to Start Puzzle");
-      buildPieces();
-    }
 
-    function setCanvas() {
-      canvas.width = puzzleWidth;
-      canvas.height = puzzleHeight;
-      canvas.style.border = "1px solid black";
     }
 
     function onImage() {
@@ -59,20 +76,20 @@ function ImagePuzzle() {
       puzzleWidth = pieceWidth * difficulty;
       puzzleHeight = pieceHeight * difficulty;
       setCanvas();
-      initPuzzle();
+      // initPuzzle();
     }
 
-    function createTitle(msg) {
-      stage.fillStyle = "#000000";
-      stage.globalAlpha = 0.4;
-      stage.fillRect(100, puzzleHeight - 40, puzzleWidth - 200, 40);
-      stage.fillStyle = "#FFFFFF";
-      stage.globalAlpha = 1;
-      stage.textAlign = "center";
-      stage.textBaseline = "middle";
-      stage.font = "20px Arial";
-      stage.fillText(msg, puzzleWidth / 2, puzzleHeight - 20);
-    }
+    // function createTitle(msg) {
+    //   stage.fillStyle = "#000000";
+    //   stage.globalAlpha = 0.4;
+    //   stage.fillRect(100, puzzleHeight - 40, puzzleWidth - 200, 40);
+    //   stage.fillStyle = "#FFFFFF";
+    //   stage.globalAlpha = 1;
+    //   stage.textAlign = "center";
+    //   stage.textBaseline = "middle";
+    //   stage.font = "20px Arial";
+    //   stage.fillText(msg, puzzleWidth / 2, puzzleHeight - 20);
+    // }
 
     function buildPieces() {
       let i;
@@ -175,7 +192,7 @@ function ImagePuzzle() {
           } else {
             currentDropPiece = piece;
             stage.save();
-            stage.globalAlpha = 0.4;
+            stage.globalAlpha = 0.2;
             stage.fillStyle = PUZZLE_HOVER_TINT;
             stage.fillRect(
               currentDropPiece.xPos,
@@ -245,7 +262,7 @@ function ImagePuzzle() {
     }
 
     function gameOver() {
-      setWelcomeModal(true)
+      // setWelcomeModal(true)
       document.onpointerdown = null;
       document.onpointermove = null;
       document.onpointerup = null;
@@ -289,6 +306,7 @@ function ImagePuzzle() {
         }
       }
       if (gameWin) {
+        setWelcomeModal(true)
         setTimeout(gameOver, 500);
       }
     }
@@ -310,9 +328,9 @@ function ImagePuzzle() {
       puzzleHeight = pieceHeight * difficulty;
       gameOver();
     }
-    // document.querySelector("#difficulty").oninput = updateDifficulty;
-    document.getElementById("puzzleLength").value = updateDifficulty;
-  }, [])
+    document.querySelector("#puzzleLength").oninput = updateDifficulty;
+    // document.getElementById("puzzleLength").oninput= updateDifficulty;
+  }, [puzzleDifficulty])
 
   return (
     <>
@@ -328,21 +346,23 @@ function ImagePuzzle() {
         />
       </Head>
       <div className="bg-zinc-100">
-        {/* {
+        {
           welcomeModal
             ?
-            <Welcome setWelcomeModal={setWelcomeModal}/>
+            <Welcome setWelcomeModal={setWelcomeModal} />
             :
             null
-        } */}
+        }
         <div className="container mx-auto flex flex-col justify-center items-center w-full">
           <div className="flex justify-center flex-col mt-3 max-w-[1024px] w-full">
-            <form onSubmit={(e) => { initPuzzle(e) }} className="border border-zinc-200 px-5 py-5 rounded-lg w-full mt-3">
+            <div className="border border-zinc-200 px-5 py-5 rounded-lg w-full mt-3">
               <div className="w-full">
                 <label className=" text-zinc-800 text-sm font-medium pb-3">
                   Puzzle Size
                 </label>
                 <input
+                  value={puzzleDifficulty}
+                  onChange={(e) => { setPuzzleDifficulty(e.target.value) }}
                   name="puzzleLength"
                   id="puzzleLength"
                   className="mt-2 outline-none border border-zinc-200 rounded-md placeholder-zinc-400 text-zinc-700 w-full text-xs leading-[150%] font-normal py-[14px] px-[14px] h-[42px]"
@@ -355,19 +375,11 @@ function ImagePuzzle() {
               </div>
               <div className="flex justify-between items-center ">
                 <button
-                  type="submit"
                   className="bg-zinc-800 flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium">
                   Create Puzzle
                 </button>
-                <button
-                  // onClick={() => { setPuzzleSize("") }}
-                  type="button"
-                  // disabled={puzzleSize.length !== 0 ? false : true}
-                  className={`bg-zinc-800 cursor-pointer flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium`}>
-                  Clear Grid
-                </button>
               </div>
-            </form>
+            </div>
           </div>
           <br />
           <canvas id="canvas" width="300" height="300"></canvas>
