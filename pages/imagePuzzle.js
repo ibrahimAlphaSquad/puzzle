@@ -9,9 +9,11 @@ function ImagePuzzle() {
   // set
   const [puzzleDifficulty, setPuzzleDifficulty] = useState(null)
 
+  const [puzzleSource, setpuzzleSource] = useState("")
+
   //Image Grid
   useEffect(() => {
-    const PUZZLE_HOVER_TINT = "#009900";
+    const PUZZLE_HOVER_TINT = "#6ec5eb";
     const img = new Image();
     const canvas = document.querySelector("#canvas");
     const stage = canvas.getContext("2d");
@@ -26,7 +28,8 @@ function ImagePuzzle() {
     let currentDropPiece;
     let mouse;
     img.addEventListener("load", onImage, false);
-    img.src = "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg";
+    // img.src = setRandomImage();
+    img.src = puzzleSource;
 
     function initPuzzle() {
       pieces = [];
@@ -55,7 +58,6 @@ function ImagePuzzle() {
     function setCanvas() {
       canvas.width = puzzleWidth;
       canvas.height = puzzleHeight;
-      canvas.style.border = "1px solid black";
       stage.drawImage(
         img,
         0,
@@ -329,8 +331,20 @@ function ImagePuzzle() {
       gameOver();
     }
     document.querySelector("#puzzleLength").oninput = updateDifficulty;
-    // document.getElementById("puzzleLength").oninput= updateDifficulty;
   }, [puzzleDifficulty])
+
+  function setRandomImage() {
+    let dup = [
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1903-Panhard-et-Levassor_2-800x533.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1957-Ferrari-500-TRC_1-800x533.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/DSC2838-800x533.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/image1.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg"
+    ]
+
+    return dup[parseInt(Math.random() * 5)]
+  }
 
   return (
     <>
@@ -362,7 +376,7 @@ function ImagePuzzle() {
                 </label>
                 <input
                   value={puzzleDifficulty}
-                  onChange={(e) => { setPuzzleDifficulty(e.target.value) }}
+                  onChange={(e) => { setPuzzleDifficulty(e.target.value); setpuzzleSource(setRandomImage()) }}
                   name="puzzleLength"
                   id="puzzleLength"
                   className="mt-2 outline-none border border-zinc-200 rounded-md placeholder-zinc-400 text-zinc-700 w-full text-xs leading-[150%] font-normal py-[14px] px-[14px] h-[42px]"
@@ -382,7 +396,7 @@ function ImagePuzzle() {
             </div>
           </div>
           <br />
-          <canvas id="canvas" width="300" height="300"></canvas>
+          <canvas id="canvas"></canvas>
         </div>
       </div>
     </>
