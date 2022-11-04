@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex justify-center items-center flex-col bg-zinc-100 w-screen h-screen pt-2">
+      <div className="flex justify-start items-center flex-col bg-zinc-100 w-screen h-screen pt-2">
         <h1 className="text-3xl font-bold text-center text-zinc-900">
           Puzzle App
         </h1>

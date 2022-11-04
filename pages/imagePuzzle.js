@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import React, { useEffect, useRef, useState } from 'react'
+import Stopwatch from './stopWatch';
 import Welcome from './welcome';
 
 function ImagePuzzle() {
@@ -9,7 +10,27 @@ function ImagePuzzle() {
   // set
   const [puzzleDifficulty, setPuzzleDifficulty] = useState(null)
 
+  const [startPuzzle, setStartPuzzle] = useState(false)
+
+  // Image
   const [puzzleSource, setpuzzleSource] = useState("")
+
+  // Timer
+  const [time, setTime] = useState(0);
+  const [running, setRunning] = useState(false);
+
+  useEffect(() => {
+    let interval;
+    if (running) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 10);
+      }, 10);
+    } else if (!running) {
+      clearInterval(interval);
+    }
+    console.log(Math.floor((time / 60000) % 60))
+    return () => clearInterval(interval);
+  }, [running]);
 
   //Image Grid
   useEffect(() => {
@@ -39,25 +60,6 @@ function ImagePuzzle() {
       };
       currentPiece = null;
       currentDropPiece = null;
-      // stage.drawImage(
-      //   img,
-      //   0,
-      //   0,
-      //   puzzleWidth,
-      //   puzzleHeight,
-      //   0,
-      //   0,
-      //   puzzleWidth,
-      //   puzzleHeight
-      // );
-      // createTitle("Click to Start Puzzle");
-      buildPieces();
-
-    }
-
-    function setCanvas() {
-      canvas.width = puzzleWidth;
-      canvas.height = puzzleHeight;
       stage.drawImage(
         img,
         0,
@@ -69,6 +71,26 @@ function ImagePuzzle() {
         puzzleWidth,
         puzzleHeight
       );
+      // createTitle("Click to Start Puzzle");
+      buildPieces();
+
+    }
+
+    function setCanvas() {
+      canvas.width = puzzleWidth;
+      canvas.height = puzzleHeight;
+      // stage.drawImage(
+      //   img,
+      //   0,
+      //   0,
+      //   puzzleWidth,
+      //   puzzleHeight,
+      //   0,
+      //   0,
+      //   puzzleWidth,
+      //   puzzleHeight
+      // );
+      initPuzzle();
 
     }
 
@@ -78,7 +100,7 @@ function ImagePuzzle() {
       puzzleWidth = pieceWidth * difficulty;
       puzzleHeight = pieceHeight * difficulty;
       setCanvas();
-      // initPuzzle();
+      initPuzzle();
     }
 
     // function createTitle(msg) {
@@ -109,7 +131,8 @@ function ImagePuzzle() {
           yPos += pieceHeight;
         }
       }
-      document.onpointerdown = shufflePuzzle;
+
+      document.getElementById("createPuzzle").onpointerdown = shufflePuzzle;
     }
 
     function shufflePuzzle() {
@@ -139,6 +162,7 @@ function ImagePuzzle() {
         }
       }
       document.onpointerdown = onPuzzleClick;
+      setTime(0);
     }
 
     function checkPieceClicked() {
@@ -308,7 +332,8 @@ function ImagePuzzle() {
         }
       }
       if (gameWin) {
-        setWelcomeModal(true)
+        setWelcomeModal(true);
+        setRunning(false);
         setTimeout(gameOver, 500);
       }
     }
@@ -330,8 +355,9 @@ function ImagePuzzle() {
       puzzleHeight = pieceHeight * difficulty;
       gameOver();
     }
-    document.querySelector("#puzzleLength").oninput = updateDifficulty;
-  }, [puzzleDifficulty])
+    // document.querySelector("#puzzleLength").oninput = updateDifficulty;
+    document.getElementById("puzzleLength").oninput = updateDifficulty;
+  }, [puzzleDifficulty, startPuzzle])
 
   function setRandomImage() {
     let dup = [
@@ -344,6 +370,12 @@ function ImagePuzzle() {
     ]
 
     return dup[parseInt(Math.random() * 5)]
+  }
+
+  const handleInput = (e) => {
+    setPuzzleDifficulty(e.target.value);
+    setpuzzleSource(setRandomImage());
+    setRunning(false);
   }
 
   return (
@@ -360,14 +392,7 @@ function ImagePuzzle() {
         />
       </Head>
       <div className="bg-zinc-100">
-        {
-          welcomeModal
-            ?
-            <Welcome setWelcomeModal={setWelcomeModal} />
-            :
-            null
-        }
-        <div className="container mx-auto flex flex-col justify-center items-center w-full">
+        <div className="container mx-auto flex flex-col justify-center items-center min-w-[1024px] w-full">
           <div className="flex justify-center flex-col mt-3 max-w-[1024px] w-full">
             <div className="border border-zinc-200 px-5 py-5 rounded-lg w-full mt-3">
               <div className="w-full">
@@ -375,8 +400,8 @@ function ImagePuzzle() {
                   Puzzle Size
                 </label>
                 <input
-                  value={puzzleDifficulty}
-                  onChange={(e) => { setPuzzleDifficulty(e.target.value); setpuzzleSource(setRandomImage()) }}
+                  // value={puzzleDifficulty}
+                  onChange={(e) => { handleInput(e) }}
                   name="puzzleLength"
                   id="puzzleLength"
                   className="mt-2 outline-none border border-zinc-200 rounded-md placeholder-zinc-400 text-zinc-700 w-full text-xs leading-[150%] font-normal py-[14px] px-[14px] h-[42px]"
@@ -387,16 +412,36 @@ function ImagePuzzle() {
                   required
                 />
               </div>
-              <div className="flex justify-between items-center ">
+              <div className={`${puzzleDifficulty ? " " : "invisible"} flex justify-between items-center `}>
                 <button
-                  className="bg-zinc-800 flex items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium">
-                  Create Puzzle
+                  id="createPuzzle"
+                  name="createPuzzle"
+                  onClick={() => { setStartPuzzle(true); setRunning(true) }}
+                  className="bg-zinc-800 flex justify-center items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium w-[105px]">
+                  {
+                    (startPuzzle && startPuzzle) == true
+                      ?
+                      <div className="flex flex-row justify-center items-center">
+                        <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
+                        <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
+                        <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
+                      </div>
+                      :
+                      "Create Puzzle"
+                  }
                 </button>
               </div>
+              {
+                welcomeModal
+                  ?
+                  <Welcome setWelcomeModal={setWelcomeModal} />
+                  :
+                  null
+              }
             </div>
           </div>
           <br />
-          <canvas id="canvas"></canvas>
+          <canvas id="canvas" ></canvas>
         </div>
       </div>
     </>
