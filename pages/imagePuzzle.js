@@ -6,13 +6,7 @@ import Welcome from './welcome';
 function ImagePuzzle() {
   // Modal
   const [welcomeModal, setWelcomeModal] = useState(false)
-
-  // set
   const [puzzleDifficulty, setPuzzleDifficulty] = useState(null)
-
-  const [startPuzzle, setStartPuzzle] = useState(false)
-
-  // Image
   const [puzzleSource, setpuzzleSource] = useState("")
 
   // Timer
@@ -162,7 +156,7 @@ function ImagePuzzle() {
         }
       }
       document.onpointerdown = onPuzzleClick;
-      setTime(0);
+      // setTime(0);
     }
 
     function checkPieceClicked() {
@@ -182,6 +176,7 @@ function ImagePuzzle() {
     }
 
     function updatePuzzle(e) {
+      console.log("----", e)
       currentDropPiece = null;
       if (e.layerX || e.layerX == 0) {
         mouse.x = e.layerX - canvas.offsetLeft;
@@ -362,18 +357,17 @@ function ImagePuzzle() {
       puzzleHeight = pieceHeight * difficulty;
       gameOver();
     }
-    // document.querySelector("#puzzleLength").oninput = updateDifficulty;
     document.getElementById("puzzleLength").oninput = updateDifficulty;
-  }, [puzzleDifficulty, startPuzzle])
+  }, [puzzleDifficulty])
 
   function setRandomImage() {
     let dup = [
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1903-Panhard-et-Levassor_2-800x533.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1957-Ferrari-500-TRC_1-800x533.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/DSC2838-800x533.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/image1.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg"
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/avatar.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/eagle.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/lilly.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/lion-king.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/Rango-riding.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/Timon-And-Pumbaa.png"
     ]
 
     return dup[parseInt(Math.random() * 5)]
@@ -383,6 +377,12 @@ function ImagePuzzle() {
     setPuzzleDifficulty(e.target.value);
     setpuzzleSource(setRandomImage());
     setRunning(false);
+  }
+
+  const handleCreatePuzzle = () => {
+    if (running !== true) {
+      setRunning(true);
+    }
   }
 
   return (
@@ -398,8 +398,8 @@ function ImagePuzzle() {
           content="Puzzle App"
         />
       </Head>
-      <div className="bg-zinc-100">
-        <div className="container mx-auto flex flex-col justify-center items-center min-w-[1024px] w-full">
+      <div className="bg-zinc-100 w-full h-full">
+        <div className=" mx-auto flex flex-col justify-center items-center w-full">
           <div className="flex justify-center flex-col mt-3 max-w-[1024px] w-full">
             <div className="border border-zinc-200 px-5 py-5 rounded-lg w-full mt-3">
               <div className="w-full">
@@ -407,7 +407,6 @@ function ImagePuzzle() {
                   Puzzle Size
                 </label>
                 <input
-                  // value={puzzleDifficulty}
                   onChange={(e) => { handleInput(e) }}
                   name="puzzleLength"
                   id="puzzleLength"
@@ -419,36 +418,32 @@ function ImagePuzzle() {
                   required
                 />
               </div>
-              <div className={`${puzzleDifficulty ? " " : "invisible"} flex justify-between items-center `}>
+              <div className={`${puzzleDifficulty ? "block" : "hidden"} flex justify-start items-start w-full `}>
+                <div
+                  className={`${running ? "block" : "hidden"} bg-zinc-800 flex justify-center items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium w-[105px]`}>
+                  <div className="flex flex-row justify-center items-center">
+                    <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
+                    <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
+                    <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
+                  </div>
+                </div>
                 <button
                   id="createPuzzle"
-                  name="createPuzzle"
-                  onClick={() => { setStartPuzzle(true); setRunning(true) }}
-                  className="bg-zinc-800 flex justify-center items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium w-[105px]">
-                  {
-                    (startPuzzle && startPuzzle) == true
-                      ?
-                      <div className="flex flex-row justify-center items-center">
-                        <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
-                        <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
-                        <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
-                      </div>
-                      :
-                      "Create Puzzle"
-                  }
+                  onClick={() => { handleCreatePuzzle() }}
+                  className={`${running || puzzleDifficulty == null ? "hidden" : "block"} bg-zinc-800 flex justify-center items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium w-[105px]`}>
+                  Create Puzzle
                 </button>
               </div>
               {
                 welcomeModal
                   ?
-                  <Welcome setWelcomeModal={setWelcomeModal} />
+                  <Welcome setWelcomeModal={setWelcomeModal} time={time} />
                   :
                   null
               }
             </div>
           </div>
-          <br />
-          <canvas id="canvas" ></canvas>
+          <canvas id="canvas" className=''></canvas>
         </div>
       </div>
     </>

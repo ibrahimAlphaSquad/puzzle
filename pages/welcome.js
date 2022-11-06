@@ -1,9 +1,11 @@
+import { useRouter } from 'next/router'
 import React from 'react'
 
-function Welcome({ setWelcomeModal, setPuzzleSize }) {
+function Welcome({ setWelcomeModal, setPuzzleSize, time }) {
+    const router = useRouter()
     return (
         <div
-            className="relative z-50"
+            className="relative z-50 w-full bg-zinc-500"
             aria-labelledby="modal-title"
             role="dialog"
             aria-modal="true"
@@ -13,13 +15,24 @@ function Welcome({ setWelcomeModal, setPuzzleSize }) {
                 <div className="flex min-h-full items-center justify-center p-4 text-center  ">
                     <div className="w-full max-w-[290px] transform overflow-hidden rounded-lg bg-white shadow-xl transition-all ">
                         <div className="relative px-[32px] py-[24px]">
-                            <div className="flex flex-col max-w-[290px] items-center justify-center w-full">
-                                <h1 className="pt-4 text-[#262626] text-[18px] font-semibold font-Manrope leading-[100%]">
+                            <div className="flex flex-col max-w-[350px] items-center justify-center w-full">
+                                <h1 className="pt-4 text-zinc-800 text-[18px] font-semibold leading-[100%]">
                                     Welcome to team
                                 </h1>
+                                <div className="pt-4 text-zinc-800 text-[18px] font-normal leading-[100%]">
+                                    <p>
+                                        You Have complete this Puzzle in
+                                    </p>
+                                    <div className="flex flex-row justify-center items-center mt-1">
+                                        <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
+                                        <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
+                                        <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
+                                    </div>
+                                </div>
                             </div>
                             <div
-                                onClick={() => { setWelcomeModal(false), setPuzzleSize ? setPuzzleSize("") : document.getElementById("puzzleLength").value = "" }}
+                                // onClick={() => { setWelcomeModal(false), setPuzzleSize ? setPuzzleSize("") : document.getElementById("puzzleLength").value = "" }}
+                                onClick={() => { localStorage.setItem("time", time), router.reload() }}
                                 className="absolute top-[16px] cursor-pointer right-[16px]"
                             >
                                 <svg
