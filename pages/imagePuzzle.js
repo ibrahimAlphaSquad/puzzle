@@ -22,7 +22,7 @@ function ImagePuzzle() {
     } else if (!running) {
       clearInterval(interval);
     }
-    console.log(Math.floor((time / 60000) % 60))
+    // console.log(Math.floor((time / 60000) % 60))
     return () => clearInterval(interval);
   }, [running]);
 
@@ -176,7 +176,7 @@ function ImagePuzzle() {
     }
 
     function updatePuzzle(e) {
-      console.log("----", e)
+      // console.log("----", e)
       currentDropPiece = null;
       if (e.layerX || e.layerX == 0) {
         mouse.x = e.layerX - canvas.offsetLeft;
@@ -361,14 +361,24 @@ function ImagePuzzle() {
   }, [puzzleDifficulty])
 
   function setRandomImage() {
+    // 800 x 533
     let dup = [
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/avatar.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/eagle.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/lilly.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/lion-king.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/Rango-riding.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/Timon-And-Pumbaa.png"
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1903-Panhard-et-Levassor_2-800x533.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1957-Ferrari-500-TRC_1-800x533.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/image1.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg"
     ]
+
+    // 600 x 400
+    // let dup = [
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/avatar.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/eagle.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/lilly.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/lion-king.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/Rango-riding.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/Timon-And-Pumbaa.png"
+    // ]
 
     return dup[parseInt(Math.random() * 5)]
   }
