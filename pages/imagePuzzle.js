@@ -89,7 +89,9 @@ function ImagePuzzle() {
     }
 
     function onImage() {
-      pieceWidth = Math.floor(img.width / difficulty);
+      pieceWidth = window.matchMedia("(max-width: 768px)").matches
+                ? Math.floor(370 / difficulty)
+                : Math.floor(img.width / difficulty);
       pieceHeight = Math.floor(img.height / difficulty);
       puzzleWidth = pieceWidth * difficulty;
       puzzleHeight = pieceHeight * difficulty;
@@ -279,8 +281,7 @@ function ImagePuzzle() {
         stage.restore();
         document.onpointermove = updatePuzzle;
         document.onpointerup = pieceDropped;
-        document.ontouchmove = updatePuzzle;
-        document.ontouchend = pieceDropped;
+    
       }
     }
 
@@ -289,17 +290,14 @@ function ImagePuzzle() {
       document.onpointerdown = null;
       document.onpointermove = null;
       document.onpointerup = null;
-      document.ontouchstart = null;
-      document.ontouchmove = null;
-      document.ontouchend = null;
+    
       initPuzzle();
     }
 
     function pieceDropped(e) {
       document.onpointermove = null;
       document.onpointerup = null;
-      document.ontouchstart = null;
-      document.ontouchmove = null;
+ 
       if (currentDropPiece !== null) {
         let tmp = {
           xPos: currentPiece.xPos,

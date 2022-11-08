@@ -17,11 +17,11 @@ function Welcome({ setWelcomeModal, setPuzzleSize, time }) {
                         <div className="relative px-[32px] py-[24px]">
                             <div className="flex flex-col max-w-[350px] items-center justify-center w-full">
                                 <h1 className="pt-4 text-zinc-800 text-[18px] font-semibold leading-[100%]">
-                                    Welcome to team
+                                    Welcome to the team
                                 </h1>
                                 <div className="pt-4 text-zinc-800 text-[18px] font-normal leading-[100%]">
                                     <p>
-                                        You Have complete this Puzzle in
+                                        You Have completed this Puzzle in
                                     </p>
                                     <div className="flex flex-row justify-center items-center mt-1">
                                         <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
