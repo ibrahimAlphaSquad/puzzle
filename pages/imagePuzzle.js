@@ -3,7 +3,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import Stopwatch from './stopWatch';
 import Welcome from './welcome';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function ImagePuzzle() {
+
   // Modal
   const [welcomeModal, setWelcomeModal] = useState(false)
   const [puzzleDifficulty, setPuzzleDifficulty] = useState(null)
@@ -89,7 +93,9 @@ function ImagePuzzle() {
     }
 
     function onImage() {
-      pieceWidth = Math.floor(img.width / difficulty);
+      pieceWidth = window.matchMedia("(max-width: 768px)").matches
+        ? Math.floor(370 / difficulty)
+        : Math.floor(img.width / difficulty);
       pieceHeight = Math.floor(img.height / difficulty);
       puzzleWidth = pieceWidth * difficulty;
       puzzleHeight = pieceHeight * difficulty;
@@ -362,23 +368,23 @@ function ImagePuzzle() {
 
   function setRandomImage() {
     // 800 x 533
-    let dup = [
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1903-Panhard-et-Levassor_2-800x533.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1957-Ferrari-500-TRC_1-800x533.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/image1.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg"
-    ]
+    // let dup = [
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/1903-Panhard-et-Levassor_2-800x533.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/1957-Ferrari-500-TRC_1-800x533.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/image1.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg"
+    // ]
 
     // 600 x 400
-    // let dup = [
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/avatar.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/eagle.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/lilly.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/lion-king.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/Rango-riding.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/Timon-And-Pumbaa.png"
-    // ]
+    let dup = [
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/avatar.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/eagle.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/lilly.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/lion-king.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/Rango-riding.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/Timon-And-Pumbaa.png"
+    ]
 
     return dup[parseInt(Math.random() * 5)]
   }
@@ -394,6 +400,15 @@ function ImagePuzzle() {
       setRunning(true);
     }
   }
+
+  useEffect(() => {
+    if (welcomeModal === true) {
+      notify();
+    }
+  }, [welcomeModal]);
+
+  // // Toaster
+  const notify = () => toast("We have completed the puzzle successfully!");
 
   return (
     <>
@@ -447,7 +462,22 @@ function ImagePuzzle() {
               {
                 welcomeModal
                   ?
-                  <Welcome setWelcomeModal={setWelcomeModal} time={time} />
+                  <>
+                    <Welcome setWelcomeModal={setWelcomeModal} time={time} />
+                    <ToastContainer
+                      position="top-right"
+                      autoClose={5000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      data={"asdada"}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      theme="dark" />
+                    <span id="confettiReward" />
+                  </>
                   :
                   null
               }

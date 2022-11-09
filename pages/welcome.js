@@ -1,27 +1,47 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
+
+import { useReward } from 'react-rewards';
+
 
 function Welcome({ setWelcomeModal, setPuzzleSize, time }) {
+    const config = {
+        elementCount: 200,
+        elementSize: 8,
+        spread: 150,
+        zIndex: 9999,
+        lifetime: 500,
+        startVelocity: 30,
+    };
+
+    const { reward: confettiReward, isAnimating: isConfettiAnimating } = useReward('confettiReward', 'confetti', config);
+
     const router = useRouter()
+
+    useEffect(() => {
+        confettiReward();
+    }, [])
+
     return (
         <div
-            className="relative z-50 w-full bg-zinc-500"
+            className="relative z-20 w-full bg-zinc-500"
             aria-labelledby="modal-title"
             role="dialog"
             aria-modal="true"
         >
             <div className="fixed inset-0 bg-zinc-500 bg-opacity-70 transition-opacity"></div>
             <div className="fixed inset-0 overflow-y-auto">
+                <span id="confettiReward" className="z-40 flex justify-center items-center" />
                 <div className="flex min-h-full items-center justify-center p-4 text-center  ">
                     <div className="w-full max-w-[290px] transform overflow-hidden rounded-lg bg-white shadow-xl transition-all ">
                         <div className="relative px-[32px] py-[24px]">
                             <div className="flex flex-col max-w-[350px] items-center justify-center w-full">
                                 <h1 className="pt-4 text-zinc-800 text-[18px] font-semibold leading-[100%]">
-                                    Welcome to team
+                                    Welcome to the team
                                 </h1>
                                 <div className="pt-4 text-zinc-800 text-[18px] font-normal leading-[100%]">
                                     <p>
-                                        You Have complete this Puzzle in
+                                        You have complete this Puzzle in
                                     </p>
                                     <div className="flex flex-row justify-center items-center mt-1">
                                         <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
