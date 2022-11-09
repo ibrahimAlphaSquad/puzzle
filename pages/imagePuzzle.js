@@ -411,7 +411,6 @@ function ImagePuzzle() {
     elementCount: 200,
     elementSize: 8,
     spread: 150,
-    zIndex: 9999,
     lifetime: 500,
     startVelocity: 30,
   };
@@ -476,7 +475,7 @@ function ImagePuzzle() {
                   Create Puzzle
                 </button>
               </div>
-              <span id="confettiReward" className="z-40 flex justify-center items-center" />
+              <span id="confettiReward" className="z-[100] flex justify-center items-center" />
               {
                 welcomeModal
                   ?
