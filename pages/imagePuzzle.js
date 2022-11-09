@@ -3,9 +3,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import Stopwatch from './stopWatch';
 import Welcome from './welcome';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { useReward } from 'react-rewards';
+
 function ImagePuzzle() {
+
   // Modal
   const [welcomeModal, setWelcomeModal] = useState(false)
+  const [welcomeConfitte, setWelcomeConfitte] = useState(false)
   const [puzzleDifficulty, setPuzzleDifficulty] = useState(null)
   const [puzzleSource, setpuzzleSource] = useState("")
 
@@ -90,8 +97,8 @@ function ImagePuzzle() {
 
     function onImage() {
       pieceWidth = window.matchMedia("(max-width: 768px)").matches
-                ? Math.floor(370 / difficulty)
-                : Math.floor(img.width / difficulty);
+        ? Math.floor(370 / difficulty)
+        : Math.floor(img.width / difficulty);
       pieceHeight = Math.floor(img.height / difficulty);
       puzzleWidth = pieceWidth * difficulty;
       puzzleHeight = pieceHeight * difficulty;
@@ -281,7 +288,6 @@ function ImagePuzzle() {
         stage.restore();
         document.onpointermove = updatePuzzle;
         document.onpointerup = pieceDropped;
-    
       }
     }
 
@@ -290,14 +296,12 @@ function ImagePuzzle() {
       document.onpointerdown = null;
       document.onpointermove = null;
       document.onpointerup = null;
-    
       initPuzzle();
     }
 
     function pieceDropped(e) {
       document.onpointermove = null;
       document.onpointerup = null;
- 
       if (currentDropPiece !== null) {
         let tmp = {
           xPos: currentPiece.xPos,
@@ -332,7 +336,8 @@ function ImagePuzzle() {
         }
       }
       if (gameWin) {
-        setWelcomeModal(true);
+        // setWelcomeModal(true);
+        setWelcomeConfitte(true)
         setRunning(false);
         setTimeout(gameOver, 500);
       }
@@ -360,23 +365,23 @@ function ImagePuzzle() {
 
   function setRandomImage() {
     // 800 x 533
-    let dup = [
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1903-Panhard-et-Levassor_2-800x533.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/1957-Ferrari-500-TRC_1-800x533.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/image1.jpg",
-      "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg"
-    ]
+    // let dup = [
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/1903-Panhard-et-Levassor_2-800x533.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/1957-Ferrari-500-TRC_1-800x533.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/image1.jpg",
+    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/arcane.jpg"
+    // ]
 
     // 600 x 400
-    // let dup = [
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/avatar.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/eagle.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/lilly.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/lion-king.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/Rango-riding.jpg",
-    //   "https://tuk-cdn.s3.amazonaws.com/can-uploader/Timon-And-Pumbaa.png"
-    // ]
+    let dup = [
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/avatar.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/eagle.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/lilly.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/lion-king.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/Rango-riding.jpg",
+      "https://tuk-cdn.s3.amazonaws.com/can-uploader/Timon-And-Pumbaa.png"
+    ]
 
     return dup[parseInt(Math.random() * 5)]
   }
@@ -392,6 +397,35 @@ function ImagePuzzle() {
       setRunning(true);
     }
   }
+
+  useEffect(() => {
+    if (welcomeModal === true) {
+      notify();
+    }
+  }, [welcomeModal]);
+
+  // // Toaster
+  const notify = () => toast("We have completed the puzzle successfully!");
+
+  const config = {
+    elementCount: 200,
+    elementSize: 8,
+    spread: 150,
+    zIndex: 9999,
+    lifetime: 500,
+    startVelocity: 30,
+  };
+
+  const { reward: confettiReward, isAnimating: isConfettiAnimating } = useReward('confettiReward', 'confetti', config);
+
+  useEffect(() => {
+    if (welcomeConfitte === true) {
+      confettiReward();
+      setTimeout(() => {
+        setWelcomeModal(true)
+      }, 500)
+    }
+  }, [welcomeConfitte])
 
   return (
     <>
@@ -442,10 +476,25 @@ function ImagePuzzle() {
                   Create Puzzle
                 </button>
               </div>
+              <span id="confettiReward" className="z-40 flex justify-center items-center" />
               {
                 welcomeModal
                   ?
-                  <Welcome setWelcomeModal={setWelcomeModal} time={time} />
+                  <>
+                    <Welcome setWelcomeModal={setWelcomeModal} welcomeModal={welcomeModal} time={time} />
+                    <ToastContainer
+                      position="top-right"
+                      autoClose={5000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      data={"asdada"}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      theme="dark" />
+                  </>
                   :
                   null
               }

@@ -18,17 +18,10 @@ a {
   box-sizing: border-box;
 }
 
-@media (max-width:800px) {
-  #canvas {
-    width: 700px;
-    height: 500px;
-    touch-action: none;
-  }
-}
 @media (max-width: 768px) {
   #canvas {
-      width: 370px;
-      height: 390px;
-      touch-action: none;
+    width: 350px;
+    height: 300px;
+    touch-action: none;
   }
 }

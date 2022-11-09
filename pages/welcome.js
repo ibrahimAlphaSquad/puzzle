@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 
-function Welcome({ setWelcomeModal, setPuzzleSize, time }) {
+function Welcome({ setWelcomeModal, welcomeModal, setPuzzleSize, time }) {
     const router = useRouter()
+
     return (
         <div
-            className="relative z-50 w-full bg-zinc-500"
+            className="relative z-20 w-full bg-zinc-500"
             aria-labelledby="modal-title"
             role="dialog"
             aria-modal="true"
@@ -21,7 +22,7 @@ function Welcome({ setWelcomeModal, setPuzzleSize, time }) {
                                 </h1>
                                 <div className="pt-4 text-zinc-800 text-[18px] font-normal leading-[100%]">
                                     <p>
-                                        You Have completed this Puzzle in
+                                        You have complete this Puzzle in
                                     </p>
                                     <div className="flex flex-row justify-center items-center mt-1">
                                         <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
