@@ -14,7 +14,7 @@ export default function Home() {
         </h1>
         {/* Round 1 Simple Puzzle*/}
         {/* <Puzzle /> */}
-        
+
         {/* Round 2 Image Puzzle*/}
         <ImagePuzzle />
       </div>

@@ -18,9 +18,17 @@ a {
   box-sizing: border-box;
 }
 
+
+@media (max-width:800px) {
+  #canvas {
+    width: 700px;
+    height: 500px;
+  }
+}
+
 @media (max-width: 768px) {
   #canvas {
-    width: 350px;
+    width: 310px;
     height: 300px;
     touch-action: none;
   }
