@@ -483,12 +483,10 @@ function ImagePuzzle() {
                     <Welcome setWelcomeModal={setWelcomeModal} welcomeModal={welcomeModal} time={time} />
                     <ToastContainer
                       position="top-right"
-                      autoClose={5000}
+                      autoClose={2000}
                       hideProgressBar={false}
                       newestOnTop={false}
                       closeOnClick
-                      rtl={false}
-                      data={"asdada"}
                       pauseOnFocusLoss
                       draggable
                       pauseOnHover
