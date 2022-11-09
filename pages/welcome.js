@@ -1,26 +1,8 @@
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { useReward } from 'react-rewards';
-
-
-function Welcome({ setWelcomeModal, setPuzzleSize, time }) {
-    const config = {
-        elementCount: 200,
-        elementSize: 8,
-        spread: 150,
-        zIndex: 9999,
-        lifetime: 500,
-        startVelocity: 30,
-    };
-
-    const { reward: confettiReward, isAnimating: isConfettiAnimating } = useReward('confettiReward', 'confetti', config);
-
+function Welcome({ setWelcomeModal, welcomeModal, setPuzzleSize, time }) {
     const router = useRouter()
-
-    useEffect(() => {
-        confettiReward();
-    }, [])
 
     return (
         <div
@@ -31,7 +13,6 @@ function Welcome({ setWelcomeModal, setPuzzleSize, time }) {
         >
             <div className="fixed inset-0 bg-zinc-500 bg-opacity-70 transition-opacity"></div>
             <div className="fixed inset-0 overflow-y-auto">
-                <span id="confettiReward" className="z-40 flex justify-center items-center" />
                 <div className="flex min-h-full items-center justify-center p-4 text-center  ">
                     <div className="w-full max-w-[290px] transform overflow-hidden rounded-lg bg-white shadow-xl transition-all ">
                         <div className="relative px-[32px] py-[24px]">

@@ -6,10 +6,13 @@ import Welcome from './welcome';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { useReward } from 'react-rewards';
+
 function ImagePuzzle() {
 
   // Modal
   const [welcomeModal, setWelcomeModal] = useState(false)
+  const [welcomeConfitte, setWelcomeConfitte] = useState(false)
   const [puzzleDifficulty, setPuzzleDifficulty] = useState(null)
   const [puzzleSource, setpuzzleSource] = useState("")
 
@@ -333,7 +336,8 @@ function ImagePuzzle() {
         }
       }
       if (gameWin) {
-        setWelcomeModal(true);
+        // setWelcomeModal(true);
+        setWelcomeConfitte(true)
         setRunning(false);
         setTimeout(gameOver, 500);
       }
@@ -403,6 +407,26 @@ function ImagePuzzle() {
   // // Toaster
   const notify = () => toast("We have completed the puzzle successfully!");
 
+  const config = {
+    elementCount: 200,
+    elementSize: 8,
+    spread: 150,
+    zIndex: 9999,
+    lifetime: 500,
+    startVelocity: 30,
+  };
+
+  const { reward: confettiReward, isAnimating: isConfettiAnimating } = useReward('confettiReward', 'confetti', config);
+
+  useEffect(() => {
+    if (welcomeConfitte === true) {
+      confettiReward();
+      setTimeout(() => {
+        setWelcomeModal(true)
+      }, 500)
+    }
+  }, [welcomeConfitte])
+
   return (
     <>
       <Head>
@@ -452,11 +476,12 @@ function ImagePuzzle() {
                   Create Puzzle
                 </button>
               </div>
+              <span id="confettiReward" className="z-40 flex justify-center items-center" />
               {
                 welcomeModal
                   ?
                   <>
-                    <Welcome setWelcomeModal={setWelcomeModal} time={time} />
+                    <Welcome setWelcomeModal={setWelcomeModal} welcomeModal={welcomeModal} time={time} />
                     <ToastContainer
                       position="top-right"
                       autoClose={5000}
@@ -469,7 +494,6 @@ function ImagePuzzle() {
                       draggable
                       pauseOnHover
                       theme="dark" />
-                    <span id="confettiReward" />
                   </>
                   :
                   null
