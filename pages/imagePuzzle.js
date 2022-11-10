@@ -480,7 +480,7 @@ function ImagePuzzle() {
                 welcomeModal
                   ?
                   <>
-                    <Welcome setWelcomeModal={setWelcomeModal} welcomeModal={welcomeModal} time={time} />
+                    {/* <Welcome setWelcomeModal={setWelcomeModal} welcomeModal={welcomeModal} time={time} /> */}
                     <ToastContainer
                       position="top-right"
                       autoClose={2000}
