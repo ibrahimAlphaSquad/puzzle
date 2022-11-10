@@ -7,8 +7,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { useReward } from 'react-rewards';
+import { useRouter } from 'next/router';
 
 function ImagePuzzle() {
+  const router = useRouter()
 
   // Modal
   const [welcomeModal, setWelcomeModal] = useState(false)
@@ -401,6 +403,10 @@ function ImagePuzzle() {
   useEffect(() => {
     if (welcomeModal === true) {
       notify();
+      localStorage.setItem("time", time);
+      setTimeout(() => {
+        router.reload();
+      }, 3000)
     }
   }, [welcomeModal]);
 
@@ -473,6 +479,12 @@ function ImagePuzzle() {
                   onClick={() => { handleCreatePuzzle() }}
                   className={`${running || puzzleDifficulty == null ? "hidden" : "block"} bg-zinc-800 flex justify-center items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium w-[105px]`}>
                   Create Puzzle
+                </button>
+                <button
+                  id="resetPuzzle"
+                  onClick={() => { router.reload() }}
+                  className={`${!running || puzzleDifficulty == null ? "hidden" : "block"} ml-2 bg-zinc-800 flex justify-center items-center text-sm text-white px-2 py-2 rounded-md mt-2 font-medium w-[105px]`}>
+                  Reset Puzzle
                 </button>
               </div>
               <span id="confettiReward" className="z-[100] flex justify-center items-center" />
