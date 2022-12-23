@@ -388,6 +388,16 @@ function ImagePuzzle() {
     return dup[parseInt(Math.random() * 5)]
   }
 
+  const image = () => {
+    const img = new Image();
+    img.src = "https://tuk-cdn.s3.amazonaws.com/can-uploader/Rango-riding.jpg";
+    console.log("img", img)
+  }
+
+  useEffect(() => {
+    image()
+  }, []);
+
   const handleInput = (e) => {
     setPuzzleDifficulty(e.target.value);
     setpuzzleSource(setRandomImage());
