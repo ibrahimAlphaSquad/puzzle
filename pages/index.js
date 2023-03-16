@@ -13,10 +13,10 @@ export default function Home() {
           Puzzle App
         </h1>
         {/* Round 1 Simple Puzzle*/}
-        {/* <Puzzle /> */}
+        <Puzzle />
 
         {/* Round 2 Image Puzzle*/}
-        <ImagePuzzle />
+        {/* <ImagePuzzle /> */}
       </div>
     </>
   )

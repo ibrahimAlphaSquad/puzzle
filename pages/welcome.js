@@ -22,13 +22,16 @@ function Welcome({ setWelcomeModal, welcomeModal, setPuzzleSize, time }) {
                                 </h1>
                                 <div className="pt-4 text-zinc-800 text-[18px] font-normal leading-[100%]">
                                     <p>
-                                        You have complete this Puzzle in
+                                        You have complete this Puzzle
                                     </p>
-                                    <div className="flex flex-row justify-center items-center mt-1">
+                                    {/* <p>
+                                        You have complete this Puzzle in
+                                    </p> */}
+                                    {/* <div className="flex flex-row justify-center items-center mt-1">
                                         <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
                                         <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
                                         <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div
